@@ -6,8 +6,20 @@
     "message": "You shall not pass!"
   }
 */
-function restricted() {
+function restrict() {
+	return async (req, res, next) => {
+		try { 
+		  if (!req.session || !req.session.user){
+			return res.status(403).json({
+				message: "You are not allowed here",
+			})
+		}
 
+			next()
+		} catch (err) {
+			next(err)
+		}
+	}
 }
 
 /*
@@ -47,3 +59,7 @@ function checkPasswordLength() {
 }
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
+
+module.exports = {
+  restrict,
+}
